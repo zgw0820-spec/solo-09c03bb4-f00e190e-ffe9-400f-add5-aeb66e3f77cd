@@ -1,0 +1,24 @@
+{
+  "ab_ba_deadlock_expect_40P01": {
+    "batches": [
+      {"batch_id": "B1", "order_ids": ["W1", "W2"], "assignee": "alice"},
+      {"batch_id": "B2", "order_ids": ["W2", "W1"], "assignee": "bob"}
+    ],
+    "run_replay": true
+  },
+  "three_node_cycle_expect_40P01": {
+    "batches": [
+      {"batch_id": "B1", "order_ids": ["W1", "W2"], "assignee": "a1"},
+      {"batch_id": "B2", "order_ids": ["W2", "W3"], "assignee": "a2"},
+      {"batch_id": "B3", "order_ids": ["W3", "W1"], "assignee": "a3"}
+    ],
+    "run_replay": true
+  },
+  "safe_same_order_no_deadlock": {
+    "batches": [
+      {"batch_id": "B1", "order_ids": ["W1", "W2", "W3"], "assignee": "alice"},
+      {"batch_id": "B2", "order_ids": ["W9", "W1", "W2"], "assignee": "bob"}
+    ],
+    "run_replay": true
+  }
+}

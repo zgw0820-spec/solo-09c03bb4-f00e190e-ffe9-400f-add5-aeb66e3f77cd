@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: patrol
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d patrol"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    command:
+      - "postgres"
+      - "-c"
+      - "deadlock_timeout=200ms"
+      - "-c"
+      - "lock_timeout=10s"
+      - "-c"
+      - "log_lock_waits=on"
+
+  api:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/patrol
+      TRIAL_SCHEMA: deadlock_trial
+      LOCK_TIMEOUT_MS: "10000"
+      TRIAL_TIMEOUT_S: "30"
+    ports:
+      - "8000:8000"
